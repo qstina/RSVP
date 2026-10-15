@@ -65,6 +65,17 @@ const FloatingWishes = ({ isOpened }: { isOpened: boolean }) => {
   const [wishes, setWishes] = useState<Wish[]>([]);
   const [status, setStatus] = useState<"loading" | "empty" | "loaded" | "error">("loading");
 
+  const [copyEl, setCopyEl] = useState<HTMLDivElement | null>(null);
+  const [loopH, setLoopH] = useState(0);
+
+  useEffect(() => {
+    if (!copyEl) return;
+    const ro = new ResizeObserver(() => setLoopH(copyEl.offsetHeight));
+    ro.observe(copyEl);
+    setLoopH(copyEl.offsetHeight);
+    return () => ro.disconnect();
+  }, [copyEl]);
+
   useEffect(() => {
     if (!isOpened) return;
 
@@ -126,17 +137,21 @@ const FloatingWishes = ({ isOpened }: { isOpened: boolean }) => {
     return <p className="text-stone-400 font-garamond italic text-center w-full mt-10">Jadilah yang pertama untuk meninggalkan ucapan!</p>;
   }
 
+  const VIEW_H = 250;   // matches h-62.5 (62.5 × 4px)
+  const SPEED = 40;     // px per second
+  const duration = loopH / SPEED;
+
+  const unit = wishes.length > 1 && wishes.length % 2 === 1 ? [...wishes, ...wishes] : wishes;
+  const copies = loopH ? Math.max(2, Math.ceil(VIEW_H / loopH) + 1) : 2;
+
   return (
     <>
       <style>{`
-        @keyframes float-up-chat {
-          0% { transform: translateY(280px); opacity: 0; }
-          5% { opacity: 1; }
-          90% { opacity: 1; }
-          100% { transform: translateY(-200px); opacity: 0; }
+        @keyframes scroll-wishes {
+          from { transform: translateY(0); }
+          to   { transform: translateY(calc(-1 * var(--loop))); }
         }
 
-        /* iMessage Left Bubble CSS (Received) */
         .bubble-left {
           background-color: #ffffff;
           border-radius: 18px;
@@ -157,7 +172,6 @@ const FloatingWishes = ({ isOpened }: { isOpened: boolean }) => {
           mask-image: radial-gradient(circle at 0 0, transparent 15px, black 15.5px);
         }
 
-        /* iMessage Right Bubble CSS (Sent) */
         .bubble-right {
           background-color: #fdf2f8;
           border-radius: 18px;
@@ -179,34 +193,44 @@ const FloatingWishes = ({ isOpened }: { isOpened: boolean }) => {
         }
       `}</style>
 
-      <div className="relative w-full h-62.5 overflow-hidden mask-fade-y pointer-events-none">
-        {wishes.map((wish, i) => {
-          const isLeft = i % 2 === 0;
-          const duration = 14 + (i % 5) * 2;
-          const delay = (i * 3.5) % 25 + (i % 3) * 0.5;
-
-          return (
+            <div className="relative w-full h-62.5 overflow-hidden mask-fade-y pointer-events-none">
+        <div
+          className="absolute top-0 left-0 w-full will-change-transform"
+          style={
+            {
+              "--loop": `${loopH}px`,
+              animation: loopH ? `scroll-wishes ${duration}s linear infinite` : "none",
+            } as React.CSSProperties
+          }
+        >
+          {Array.from({ length: copies }).map((_, c) => (
             <div
-              key={`${wish.id}-${i}`}
-              className={`absolute px-4 py-2.5 pointer-events-auto flex flex-col gap-0.5 ${
-                isLeft ? "left-2 bubble-left" : "right-2 bubble-right"
-              }`}
-              style={{
-                animation: `float-up-chat ${duration}s linear infinite`,
-                animationDelay: `${delay}s`,
-                animationFillMode: "both",
-                opacity: 0, 
-              }}
+              key={c}
+              ref={c === 0 ? setCopyEl : undefined}
+              aria-hidden={c > 0}
+              className="flex flex-col gap-2 pb-2"
             >
-              <span className={`font-garamond font-bold text-[15px] leading-tight ${isLeft ? "text-stone-800" : "text-pink-900"}`}>
-                {wish.name}
-              </span>
-              <span className={`font-garamond text-[14px] leading-snug whitespace-pre-wrap ${isLeft ? "text-stone-700" : "text-pink-800"}`}>
-                {wish.message}
-              </span>
+              {unit.map((wish, i) => {
+                const isLeft = i % 2 === 0;
+                return (
+                  <div
+                    key={`${c}-${i}-${wish.id}`}
+                    className={`relative px-4 py-2.5 pointer-events-auto flex flex-col gap-0.5 ${
+                      isLeft ? "self-start ml-2 bubble-left" : "self-end mr-2 bubble-right"
+                    }`}
+                  >
+                    <span className={`font-garamond font-bold text-[15px] leading-tight ${isLeft ? "text-stone-800" : "text-pink-900"}`}>
+                      {wish.name}
+                    </span>
+                    <span className={`font-garamond text-[14px] leading-snug whitespace-pre-wrap wrap-break-word ${isLeft ? "text-stone-700" : "text-pink-800"}`}>
+                      {wish.message}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
-          );
-        })}
+          ))}
+        </div>
       </div>
     </>
   );

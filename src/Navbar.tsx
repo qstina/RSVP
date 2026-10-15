@@ -183,8 +183,8 @@ END:VCALENDAR`;
               <div>
                 <h3 className="font-semibold text-lg border-b border-stone-200 pb-1 mb-3">Keluarga Pengantin Perempuan</h3>
                 {[
-                  { name: "Zamberi bin Sapi'ee", role: "Bapa", phone: "+60123456789" },
-                  { name: "Abg Kak Na bin Zamberi", role: "Abang", phone: "+60174797614" }
+                  { name: "Zamberi bin Sapi'ee", role: "Bapa", phone: "+60112870280 " },
+                  { name: "Fazli bin Zamberi", role: "Abang", phone: "+60174797614" }
                 ].map((c, i) => (
                   <div key={i} className="flex items-center justify-between py-2">
                     <div>
