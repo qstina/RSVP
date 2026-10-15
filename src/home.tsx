@@ -501,6 +501,23 @@ export const Home = (): JSX.Element => {
     };
   };
 
+    const hasOpenedRef = useRef(false);
+
+  const handleOpen = () => {
+    if (hasOpenedRef.current || isOpened) return; // only ever fires once
+    hasOpenedRef.current = true;
+
+    setIsOpened(true);
+    setIsTransitioning(true);
+    setTimeout(() => setIsTransitioning(false), TRANSITION_MS);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    const audio = document.getElementById("wedding-bg-music") as HTMLAudioElement;
+    if (audio) {
+      audio.play().then(() => setIsPlaying(true)).catch((e) => console.log("Audio autoplay prevented", e));
+    }
+  };
+
   const flowersClipped = isOpened && !isTransitioning;
 
   return (
@@ -512,25 +529,13 @@ export const Home = (): JSX.Element => {
         style={{ height: "100svh" }}
       />
 
-      <main
+        <main
         className="relative shrink-0 overflow-hidden bg-[#ffeef1] shadow-2xl transition-none"
         style={{
           width: `${L.canvasW}px`,
           height: `${isOpened ? L.totalH : L.closedH}px`,
         }}
-        onClick={() => {
-          if (!isOpened) {
-            setIsOpened(true);
-            setIsTransitioning(true);
-            setTimeout(() => setIsTransitioning(false), TRANSITION_MS);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-
-            const audio = document.getElementById("wedding-bg-music") as HTMLAudioElement;
-            if (audio) {
-              audio.play().then(() => setIsPlaying(true)).catch((e) => console.log("Audio autoplay prevented", e));
-            }
-          }
-        }}
+        onClick={handleOpen}
       >
         <audio 
           id="wedding-bg-music" 
@@ -855,6 +860,37 @@ export const Home = (): JSX.Element => {
           <ScrollReveal as="footer" isOpened={isOpened} delay={800} className="absolute top-[3833px] left-[calc(50.00%-150px)] w-74.75 text-center font-garamond italic text-[14px] leading-[7.5px]">
              Direka Oleh:<br />Mizan Qistina binti Noruden
           </ScrollReveal>
+        </div>
+
+                {/* ================= TAP INDICATOR (landing only) ================= */}
+        <style>{`
+          @keyframes tap-bounce {
+            0%, 100% { transform: translateY(0); }
+            50%      { transform: translateY(-10px); }
+          }
+          @media (prefers-reduced-motion: reduce) {
+            .tap-bounce { animation: none !important; }
+          }
+        `}</style>
+
+        <div
+          className={`fixed left-1/2 -translate-x-1/2 z-60 transition-opacity duration-700 ease-out ${
+            isOpened ? "opacity-0 pointer-events-none" : "opacity-100"
+          }`}
+          style={{ bottom: "max(2rem, calc(env(safe-area-inset-bottom) + 1.5rem))" }}
+        >
+          <button
+            type="button"
+            disabled={isOpened}
+            aria-label="Sentuh skrin untuk membuka jemputan"
+            className="tap-bounce flex items-center gap-2 rounded-full bg-white/85 px-5 py-2 font-garamond italic font-regular text-lg text-stone-800 shadow-[0_2px_12px_rgba(0,0,0,0.12)] backdrop-blur-sm whitespace-nowrap"
+            style={{ animation: "tap-bounce 1.8s ease-in-out infinite" }}
+          >
+            <svg className="h-3.5 w-3.5 text-pink-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 0C12 6.62742 17.3726 12 24 12C17.3726 12 12 17.3726 12 24C12 17.3726 6.62742 12 0 12C6.62742 12 12 6.62742 12 0Z" />
+            </svg>
+            Sentuh Skrin
+          </button>
         </div>
       </main>
 
