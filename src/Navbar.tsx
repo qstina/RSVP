@@ -165,8 +165,8 @@ END:VCALENDAR`;
               <div className="mb-6">
                 <h3 className="font-semibold text-lg border-b border-stone-200 pb-1 mb-3">Keluarga Pengantin Lelaki</h3>
                 {[
-                  { name: "Noruden bin Nong", role: "Bapa", phone: "+60123456789" },
-                  { name: "Norhayati binti Ahmad", role: "Ibu", phone: "+60123456789" }
+                  { name: "Noruden bin Nong", role: "Bapa", phone: "+60167136972" },
+                  { name: "Kasmirul Iqmal bin Noruden", role: "Abang", phone: "+60162356972" }
                 ].map((c, i) => (
                   <div key={i} className="flex items-center justify-between py-2">
                     <div>
@@ -184,7 +184,7 @@ END:VCALENDAR`;
                 <h3 className="font-semibold text-lg border-b border-stone-200 pb-1 mb-3">Keluarga Pengantin Perempuan</h3>
                 {[
                   { name: "Zamberi bin Sapi'ee", role: "Bapa", phone: "+60123456789" },
-                  { name: "Zaiton binti Jahot", role: "Ibu", phone: "+60123456789" }
+                  { name: "Abg Kak Na bin Zamberi", role: "Abang", phone: "+60174797614" }
                 ].map((c, i) => (
                   <div key={i} className="flex items-center justify-between py-2">
                     <div>

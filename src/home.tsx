@@ -828,7 +828,7 @@ export const Home = (): JSX.Element => {
             <img src="/assets/yellow flower.png" alt="Yellow Flower" className="object-contain h-11.25 animate-sway-2" />
           </ScrollReveal>
 
-          <ScrollReveal as="footer" isOpened={isOpened} delay={800} className="absolute top-[3833px] left-[calc(50.00%-150px)] w-74.75 text-center font-garamond italic text-[10px] leading-[7.5px]">
+          <ScrollReveal as="footer" isOpened={isOpened} delay={800} className="absolute top-[3833px] left-[calc(50.00%-150px)] w-74.75 text-center font-garamond italic text-[14px] leading-[7.5px]">
              Direka Oleh:<br />Mizan Qistina binti Noruden
           </ScrollReveal>
         </div>
