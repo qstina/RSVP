@@ -796,7 +796,7 @@ export const Home = (): JSX.Element => {
             </ScrollReveal>
 
             <ScrollReveal as="p" isOpened={isOpened} delay={0} className="absolute top-[3617px] left-[calc(50.00%-150px)] w-74.75 text-center font-garamond font-normal text-xl leading-4">
-              Sila <span className="font-garamond font-semibold italic">RSVP</span> kehadiran anda sebelum <span className="font-garamond font-semibold">10 Disember 2026</span>
+              Sila <span className="font-garamond font-semibold italic">RSVP</span> kehadiran anda sebelum <span className="font-garamond font-semibold">1 Disember 2026</span>
             </ScrollReveal>
           </section>
 
