@@ -183,7 +183,7 @@ END:VCALENDAR`;
               <div>
                 <h3 className="font-semibold text-lg border-b border-stone-200 pb-1 mb-3">Keluarga Pengantin Perempuan</h3>
                 {[
-                  { name: "Zamberi bin Sapi'ee", role: "Bapa", phone: "+60112870280 " },
+                  { name: "Zamberi bin Sapi'ee", role: "Bapa", phone: "+601112870280 " },
                   { name: "Fazli bin Zamberi", role: "Abang", phone: "+60174797614" }
                 ].map((c, i) => (
                   <div key={i} className="flex items-center justify-between py-2">
@@ -236,18 +236,25 @@ END:VCALENDAR`;
                             <label className="mb-1 block font-normal text-sm">No. Telefon<span className="text-red-500">*</span></label>
                             <input required name="phone" type="tel" placeholder="0123456789" className="w-full rounded border border-stone-300 px-3 py-1.5 text-sm placeholder:text-stone-300 focus:border-stone-500 focus:outline-none" />
                           </div>
-                          {/* CHANGED: Replaced dropdown with an empty number input restricted to max 2 */}
+
                           <div className="flex-1">
                             <label className="mb-1 block font-normal text-sm">Kehadiran<span className="text-red-500">*</span></label>
-                            <input 
-                              required 
-                              name="attendance" 
-                              type="number" 
-                              min="1" 
-                              max="2" 
-                              placeholder="Cth: 2" 
-                              className="w-full rounded border border-stone-300 px-3 py-1.5 text-sm placeholder:text-stone-300 focus:border-stone-500 focus:outline-none" 
-                            />
+                            <div className="flex gap-3">
+                              {[1, 2].map((n) => (
+                                <label key={n} className="cursor-pointer">
+                                  <input
+                                    required
+                                    type="radio"
+                                    name="attendance"
+                                    value={n}
+                                    className="peer sr-only"
+                                  />
+                                  <span className="flex h-9 w-9 items-center justify-center rounded-full border border-stone-300 text-sm text-stone-500 transition-colors peer-checked:border-stone-700 peer-checked:bg-stone-700 peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-stone-400">
+                                    {n}
+                                  </span>
+                                </label>
+                              ))}
+                            </div>
                           </div>
                         </div>
                       )}
